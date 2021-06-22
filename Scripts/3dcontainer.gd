@@ -14,8 +14,8 @@ var h
 func _ready():
     pass # Replace with function body.
 
-func contain(item):
-    self.item = item
+func contain(newitem):
+    item = newitem
     pos = Vector2()
     angle = 0.0
     h = 0.0

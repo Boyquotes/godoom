@@ -15,7 +15,7 @@ var container = load("res://Scripts/3dcontainer.gd")
 var objects = []
 
 var player_speed = 1
-var player_spin = 40.0
+var player_spin = 50.0
 
 var angle = 0.0
 var loc = Vector2(0.0,0.0)
@@ -23,18 +23,20 @@ var camera = Transform2D()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-    for x in 5:
-        var wall = $ResourcePreloader/Bricks.duplicate()
-        wall.translate(Vector2(5,5))
-        wall.visible = true
-        var con = container.new()
-        con.contain(wall)
-        con.pos.y = 1.0
-        con.pos.x = x / 4.0
-        objects.append(con)
-        add_child(wall)
-    
-    Sprite
+    for y in 2:
+        for x in 2:
+            var wall = $ResourcePreloader/Bricks.duplicate()
+            var shad = $ResourcePreloader/Bricks.material.duplicate(true)
+            wall.material = shad
+            $ResourcePreloader/Bricks.texture.get_width()
+            wall.translate(Vector2(5,5))
+            wall.visible = true
+            var con = container.new()
+            con.contain(wall)
+            con.pos.y = y / 8.0
+            con.pos.x = x / 16.0
+            objects.append(con)
+            add_child(wall)
     
     #wall.transform.origin
 
@@ -79,11 +81,12 @@ func _process(delta):
             object.item.transform.origin.y = (object.h / screenpos.y) * get_viewport().size.y + get_viewport().size.y/2
             var viewangle = (object.angle - angle) /360*PI
             #debug_print(viewangle)
-            object.item.transform.x = Vector2(1 / screenpos.y,0)
-            object.item.transform.y = Vector2(0,1 / screenpos.y)
+            object.item.transform.x = Vector2(cos(viewangle) / screenpos.y,0)
+            #object.item.transform.y = Vector2(0,1 / screenpos.y)
             zdepths.append(screenpos.y)
             object.item.z_index = int(100 - screenpos.y*10)
-        
+            object.item.get_material().set_shader_param('left',1/screenpos.y+sin(viewangle) / 2)
+            object.item.get_material().set_shader_param('right',1/screenpos.y-sin(viewangle) / 2)
         
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

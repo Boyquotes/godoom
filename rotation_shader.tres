@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform float left;
+uniform float right;
+
+void vertex()
+{
+    float scale = (VERTEX.x * TEXTURE_PIXEL_SIZE.x + 1.0)/2.0;
+    vec2 n;
+
+    VERTEX.y = VERTEX.y * (scale * right + (1.0-scale) * left);
+    
+}"
+
+[resource]
+shader = SubResource( 1 )
+shader_param/left = 1.0
+shader_param/right = 1.0
